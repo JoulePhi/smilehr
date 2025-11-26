@@ -256,6 +256,11 @@ class RolesAndPermissionsSeeder extends Seeder
             'create update pin',
             'update update pin',
             'delete update pin',
+
+            'view master data home',
+            'create master data home',
+            'edit master data home',
+            'delete master data home',
         ];
 
 
@@ -295,5 +300,22 @@ class RolesAndPermissionsSeeder extends Seeder
         ]);
 
         $admin->assignRole('HR');
+
+        $employeeRole = Role::firstOrCreate(['name' => 'Employee']);
+        $employeeRole->givePermissionTo([
+            'view home',
+            'view attendances',
+            'view e-slip',
+            'view update pin',
+        ]);
+
+        $employee = User::firstOrCreate([
+            'email' => 'employee@hrdsiltrans.com',
+        ], [
+            'name' => 'Employee User',
+            'password' => bcrypt('employee123'),
+        ]);
+
+        $employee->assignRole('Employee');
     }
 }

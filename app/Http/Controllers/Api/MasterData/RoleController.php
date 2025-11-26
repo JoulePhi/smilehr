@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\Api\MasterData;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\{StoreRoleRequest, UpdateRoleRequest, BulkOperationRequest};
-use App\Http\Resources\API\{RoleResource, RoleWithPermissionsResource, RoleStatsResource};
-use App\Services\RoleService;
+use App\Http\Requests\Api\MasterData\{StoreRoleRequest, UpdateRoleRequest, BulkOperationRequest};
+use App\Http\Resources\Api\MasterData\{RoleResource, RoleWithPermissionsResource, RoleStatsResource};
+use App\Services\MasterData\RoleService;
 use Illuminate\Http\{JsonResponse, Request};
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\{Cache, DB, Log};
@@ -30,7 +30,6 @@ class RoleController extends Controller
         $search = $request->get('search');
         $guard = $request->get('guard', 'web');
 
-        // Validate pagination limits
         $perPage = min(max($perPage, 1), 100);
 
 

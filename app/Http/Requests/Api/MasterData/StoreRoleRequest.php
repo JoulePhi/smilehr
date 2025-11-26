@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Requests\API;
+namespace App\Http\Requests\Api\MasterData;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Spatie\Permission\Models\Role;
 
-class UpdateRoleRequest extends FormRequest
+class StoreRoleRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -15,7 +14,7 @@ class UpdateRoleRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->can('edit roles');
+        return $this->user()->can('create roles');
     }
 
     /**
@@ -25,14 +24,12 @@ class UpdateRoleRequest extends FormRequest
      */
     public function rules(): array
     {
-        $role = $this->route('role');
-
         return [
             'name' => [
-                'sometimes',
+                'required',
                 'string',
                 'max:255',
-                Rule::unique('roles', 'name')->ignore($role),
+                'unique:roles,name',
                 'regex:/^[a-zA-Z0-9_\-\s]+$/',
             ],
             'guard_name' => [
@@ -59,6 +56,7 @@ class UpdateRoleRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'name.required' => 'Role name is required.',
             'name.unique' => 'A role with this name already exists.',
             'name.regex' => 'Role name may only contain letters, numbers, spaces, hyphens, and underscores.',
             'guard_name.in' => 'Guard must be one of: web, api, sanctum.',

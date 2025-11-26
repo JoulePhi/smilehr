@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\API;
+namespace App\Http\Requests\Api\MasterData;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreRoleRequest extends FormRequest
+class StorePermissionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,7 +14,7 @@ class StoreRoleRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->can('create roles');
+        return $this->user()->can('create master data permissions');
     }
 
     /**
@@ -29,21 +29,13 @@ class StoreRoleRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                'unique:roles,name',
-                'regex:/^[a-zA-Z0-9_\-\s]+$/',
+                'unique:permissions,name',
+                'regex:/^[a-z0-9_\-\.\s:]+$/',
             ],
             'guard_name' => [
                 'sometimes',
                 'string',
                 'in:web,api,sanctum',
-            ],
-            'permissions' => [
-                'sometimes',
-                'array',
-                'max:100',
-            ],
-            'permissions.*' => [
-                'exists:permissions,id',
             ],
         ];
     }
@@ -56,12 +48,10 @@ class StoreRoleRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'Role name is required.',
-            'name.unique' => 'A role with this name already exists.',
-            'name.regex' => 'Role name may only contain letters, numbers, spaces, hyphens, and underscores.',
+            'name.required' => 'Permission name is required.',
+            'name.unique' => 'A permission with this name already exists.',
+            'name.regex' => 'Permission name may only contain lowercase letters, numbers, spaces, hyphens, periods, underscores, and colons.',
             'guard_name.in' => 'Guard must be one of: web, api, sanctum.',
-            'permissions.*.exists' => 'Selected permission does not exist.',
-            'permissions.max' => 'Cannot select more than 100 permissions.',
         ];
     }
 }

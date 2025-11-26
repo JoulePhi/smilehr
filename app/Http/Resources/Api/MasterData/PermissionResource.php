@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\API;
+namespace App\Http\Resources\Api\MasterData;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
