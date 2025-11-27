@@ -16,8 +16,7 @@ class RolesAndPermissionsSeeder extends Seeder
     public function run(): void
     {
 
-        // delete all users
-        User::truncate();
+
 
         // Reset cached roles and permissions
         app()[PermissionRegistrar::class]->forgetCachedPermissions();

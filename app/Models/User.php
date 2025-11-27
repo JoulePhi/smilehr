@@ -3,11 +3,18 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Models\Scopes\EmployeeScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
+
 
 class User extends Authenticatable
 {
@@ -23,6 +30,33 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'company_id',
+        'branch_office_id',
+        'department_id',
+        'position_id',
+        'cost_center_id',
+        'nik',
+        'profile_url',
+        'phone',
+        'birth_date',
+        'birth_place',
+        'gender',
+        'religion',
+        'phone_number',
+        'address',
+        'domicile_address',
+        'last_education',
+        'join_date',
+        'employment_status',
+        'contract_start',
+        'contract_end',
+        'late_deduction',
+        'late_tolerance',
+        'allow_remote_attendance',
+        'allow_branch_hopping',
+        'id_card_number',
+        'check_in_mode',
+
     ];
 
     /**
@@ -45,6 +79,49 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'late_deduction' => 'float',
+            'late_tolerance' => 'float',
+            'allow_remote_attendance' => 'boolean',
+            'allow_branch_hopping' => 'boolean',
         ];
+    }
+
+
+
+    public function financial(): HasOne
+    {
+        return $this->hasOne(UserFinancial::class, 'user_id', 'id');
+    }
+
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class, 'company_id', 'id');
+    }
+
+    public function branch(): BelongsTo
+    {
+        return $this->belongsTo(BranchOffice::class, 'branch_office_id', 'id');
+    }
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Department::class, 'department_id', 'id');
+    }
+
+    public function position(): BelongsTo
+    {
+        return $this->belongsTo(Position::class, 'position_id', 'id');
+    }
+
+    public function costCenter(): BelongsTo
+    {
+        return $this->belongsTo(CostCenter::class, 'cost_center_id', 'id');
+    }
+
+    #[Scope]
+    protected function employee(Builder $query): void
+    {
+        $query->whereHas('roles', function ($query) {
+            $query->where('name', 'Employee');
+        });
     }
 }

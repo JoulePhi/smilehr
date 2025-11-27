@@ -18,8 +18,12 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(TenantService::class, function ($app) {
             return new TenantService();
         });
-        $companyId = config('app.company_id', 1); // default to 1
+        $companyId = config('app.company_id', 1);
         $this->app->make(TenantService::class)->setCompanyId($companyId);
+
+        $this->app->singleton(\App\Services\UploadService::class, function () {
+            return new \App\Services\UploadService();
+        });
     }
 
     /**

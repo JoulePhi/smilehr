@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\BelongsToCompany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class BranchOffice extends Model
 {
@@ -29,4 +30,9 @@ class BranchOffice extends Model
         'latitude' => 'float',
         'radius' => 'float',
     ];
+
+    public function users(): HasMany
+    {
+        return $this->hasMany(User::class, 'branch_office_id', 'id');
+    }
 }

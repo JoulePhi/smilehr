@@ -37,6 +37,9 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::post('/', [\App\Http\Controllers\Api\MasterData\BranchController::class, 'store'])
                 ->middleware('permission:create master data branches')
                 ->name('api.branches.store');
+            Route::get('/search', [\App\Http\Controllers\Api\MasterData\BranchController::class, 'search'])
+                ->middleware('permission:view master data branches')
+                ->name('api.branches.search');
 
             Route::prefix('{branch}')->group(function () {
                 Route::get('/', [\App\Http\Controllers\Api\MasterData\BranchController::class, 'show'])
@@ -48,6 +51,99 @@ Route::middleware('auth:sanctum')->group(function () {
                 Route::delete('/', [\App\Http\Controllers\Api\MasterData\BranchController::class, 'destroy'])
                     ->middleware('permission:delete master data branches')
                     ->name('api.branches.destroy');
+            });
+        });
+
+        Route::prefix('departments')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Api\MasterData\DepartmentController::class, 'index'])
+                ->middleware('permission:create master data employees')
+                ->name('api.departments.index');
+            Route::post('/', [\App\Http\Controllers\Api\MasterData\DepartmentController::class, 'store'])
+                ->middleware('permission:create master data employees')
+                ->name('api.departments.store');
+            Route::get('/search', [\App\Http\Controllers\Api\MasterData\DepartmentController::class, 'search'])
+                ->middleware('permission:create master data employees')
+                ->name('api.departments.search');
+
+            Route::prefix('{department}')->group(function () {
+                Route::get('/', [\App\Http\Controllers\Api\MasterData\DepartmentController::class, 'show'])
+                    ->middleware('permission:create master data employees')
+                    ->name('api.departments.show');
+                Route::put('/', [\App\Http\Controllers\Api\MasterData\DepartmentController::class, 'update'])
+                    ->middleware('permission:create master data employees')
+                    ->name('api.departments.update');
+                Route::delete('/', [\App\Http\Controllers\Api\MasterData\DepartmentController::class, 'destroy'])
+                    ->middleware('permission:create master data employees')
+                    ->name('api.departments.destroy');
+            });
+        });
+
+        Route::prefix('positions')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Api\MasterData\PositionController::class, 'index'])
+                ->middleware('permission:create master data employees')
+                ->name('api.positions.index');
+            Route::post('/', [\App\Http\Controllers\Api\MasterData\PositionController::class, 'store'])
+                ->middleware('permission:create master data employees')
+                ->name('api.positions.store');
+            Route::get('/search', [\App\Http\Controllers\Api\MasterData\PositionController::class, 'search'])
+                ->middleware('permission:create master data employees')
+                ->name('api.positions.search');
+
+            Route::prefix('{position}')->group(function () {
+                Route::get('/', [\App\Http\Controllers\Api\MasterData\PositionController::class, 'show'])
+                    ->middleware('permission:create master data employees')
+                    ->name('api.positions.show');
+                Route::put('/', [\App\Http\Controllers\Api\MasterData\PositionController::class, 'update'])
+                    ->middleware('permission:create master data employees')
+                    ->name('api.positions.update');
+                Route::delete('/', [\App\Http\Controllers\Api\MasterData\PositionController::class, 'destroy'])
+                    ->middleware('permission:create master data employees')
+                    ->name('api.positions.destroy');
+            });
+        });
+
+        Route::prefix('cost-centers')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Api\MasterData\CostCenterController::class, 'index'])
+                ->middleware('permission:create master data employees')
+                ->name('api.cost-centers.index');
+            Route::post('/', [\App\Http\Controllers\Api\MasterData\CostCenterController::class, 'store'])
+                ->middleware('permission:create master data employees')
+                ->name('api.cost-centers.store');
+            Route::get('/search', [\App\Http\Controllers\Api\MasterData\CostCenterController::class, 'search'])
+                ->middleware('permission:create master data employees')
+                ->name('api.cost-centers.search');
+
+            Route::prefix('{costCenter}')->group(function () {
+                Route::get('/', [\App\Http\Controllers\Api\MasterData\CostCenterController::class, 'show'])
+                    ->middleware('permission:create master data employees')
+                    ->name('api.cost-centers.show');
+                Route::put('/', [\App\Http\Controllers\Api\MasterData\CostCenterController::class, 'update'])
+                    ->middleware('permission:create master data employees')
+                    ->name('api.cost-centers.update');
+                Route::delete('/', [\App\Http\Controllers\Api\MasterData\CostCenterController::class, 'destroy'])
+                    ->middleware('permission:create master data employees')
+                    ->name('api.cost-centers.destroy');
+            });
+        });
+
+        Route::prefix('employees')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Api\MasterData\EmployeeController::class, 'index'])
+                ->middleware('permission:create master data employees')
+                ->name('api.employees.index');
+            Route::post('/', [\App\Http\Controllers\Api\MasterData\EmployeeController::class, 'store'])
+                ->middleware('permission:create master data employees')
+                ->name('api.employees.store');
+
+            Route::prefix('{employee}')->group(function () {
+                Route::get('/', [\App\Http\Controllers\Api\MasterData\EmployeeController::class, 'show'])
+                    ->middleware('permission:create master data employees')
+                    ->name('api.employees.show');
+                Route::put('/', [\App\Http\Controllers\Api\MasterData\EmployeeController::class, 'update'])
+                    ->middleware('permission:create master data employees')
+                    ->name('api.employees.update');
+                Route::delete('/', [\App\Http\Controllers\Api\MasterData\EmployeeController::class, 'destroy'])
+                    ->middleware('permission:create master data employees')
+                    ->name('api.employees.destroy');
             });
         });
 

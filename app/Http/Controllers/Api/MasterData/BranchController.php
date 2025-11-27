@@ -64,6 +64,31 @@ class BranchController extends Controller
         //
     }
 
+
+    public function search(Request $request)
+    {
+        try {
+            $query = $request->get('query', '');
+            $branches = BranchOffice::where('name', 'like', "%$query%")
+                ->where('company_id', $this->tenantService->getCompanyId())
+                ->limit(5)
+                ->get();
+            return response()->json([
+                'success' => true,
+                'message' => 'Branches retrieved successfully.',
+                'data' => BranchResource::collection($branches)
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Branch search failed', ['error' => $e->getMessage()]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve branches.',
+                'data' => null
+            ], 500);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      */
