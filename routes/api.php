@@ -139,7 +139,7 @@ Route::middleware('auth:sanctum')->group(function () {
                     ->middleware('permission:create master data employees')
                     ->name('api.employees.show');
                 Route::put('/', [\App\Http\Controllers\Api\MasterData\EmployeeController::class, 'update'])
-                    ->middleware('permission:create master data employees')
+                    ->middleware('permission:update master data employees')
                     ->name('api.employees.update');
                 Route::delete('/', [\App\Http\Controllers\Api\MasterData\EmployeeController::class, 'destroy'])
                     ->middleware('permission:create master data employees')

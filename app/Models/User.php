@@ -117,6 +117,9 @@ class User extends Authenticatable
         return $this->belongsTo(CostCenter::class, 'cost_center_id', 'id');
     }
 
+
+
+
     #[Scope]
     protected function employee(Builder $query): void
     {

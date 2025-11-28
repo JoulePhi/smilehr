@@ -38,7 +38,10 @@ class EmployeeResource extends JsonResource
             'cost_center' => $this->whenLoaded('costCenter', function () {
                 return CostCenterResource::make($this->costCenter);
             }),
-            'profile_url' => $this->profile_url,
+            'financial' => $this->whenLoaded('financial', function () {
+                return UserFinancialResource::make($this->financial);
+            }),
+            'profile_url' => $this->profile_url ? asset('storage/' . $this->profile_url) : null,
             'birth_date' => $this->birth_date,
             'birth_place' => $this->birth_place,
             'gender' => $this->gender,
@@ -54,6 +57,8 @@ class EmployeeResource extends JsonResource
             'late_tolerance' => $this->late_tolerance,
             'allow_remote_attendance' => $this->allow_remote_attendance,
             'allow_branch_hopping' => $this->allow_branch_hopping,
+            'check_in_mode' => $this->check_in_mode,
+            'id_card_number' => $this->id_card_number,
 
 
         ];

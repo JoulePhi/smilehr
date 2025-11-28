@@ -35,7 +35,7 @@ class EmployeeController extends Controller
 
         $perPage = min(max($perPage, 1), 100);
 
-        $query = User::query()->employee()->with(['position', 'department', 'branch', 'costCenter', 'company']);
+        $query = User::query()->employee()->with(['position', 'department', 'branch', 'costCenter', 'company', 'financial']);
         if ($search) {
             $query->where(function ($query) use ($search) {
                 $query->where('name', 'like', "%$search%")
@@ -151,9 +151,14 @@ class EmployeeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(User $employee)
     {
-        //
+        $employee->load(['position', 'department', 'branch', 'costCenter', 'company', 'financial']);
+        return response()->json([
+            'success' => true,
+            'message' => 'Employee retrieved successfully.',
+            'data' => new EmployeeResource($employee),
+        ], 200);
     }
 
     /**
@@ -170,6 +175,7 @@ class EmployeeController extends Controller
     public function update(UpdateEmployeeRequest $request, User $employee, UploadService $uploader)
     {
         try {
+            DB::beginTransaction();
             $profileUrl = $employee->profile_url;
             if ($request->hasFile('profile_image')) {
                 $profileUrl = $uploader->upload($request->file('profile_image'));

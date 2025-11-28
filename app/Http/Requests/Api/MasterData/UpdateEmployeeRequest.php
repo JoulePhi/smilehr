@@ -22,10 +22,10 @@ class UpdateEmployeeRequest extends FormRequest
      */
     public function rules(): array
     {
-        $userId = $this->route('employee');
+        $user = $this->route('employee');
+        $userId = $user ? $user->id : null;
         return [
-            'name' => ['sometimes', 'string', 'max:255'],
-
+            'name' => ['nullable', 'string', 'max:255'],
             'nik' => [
                 'nullable',
                 'string',
@@ -33,42 +33,42 @@ class UpdateEmployeeRequest extends FormRequest
                 Rule::unique('users', 'nik')->ignore($userId),
             ],
 
-            'religion' => ['sometimes', 'string'],
+            'religion' => ['nullable', 'string'],
 
-            'birth_place' => ['sometimes', 'string', 'max:255'],
-            'birth_date' => ['sometimes', 'date'],
-            'gender' => ['sometimes', 'in:male,female'],
+            'birth_place' => ['nullable', 'string', 'max:255'],
+            'birth_date' => ['nullable', 'date'],
+            'gender' => ['nullable', 'in:male,female'],
 
-            'phone' => ['sometimes', 'string', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:255'],
 
             'email' => [
-                'sometimes',
+                'nullable',
                 'string',
                 'email',
                 'max:255',
                 Rule::unique('users', 'email')->ignore($userId),
             ],
 
-            'address' => ['sometimes', 'string'],
-            'domicile_address' => ['sometimes', 'string'],
-            'last_education' => ['sometimes', 'string', 'max:255'],
-            'id_card_number' => ['sometimes', 'string', 'max:50'],
+            'address' => ['nullable', 'string'],
+            'domicile_address' => ['nullable', 'string'],
+            'last_education' => ['nullable', 'string', 'max:255'],
+            'id_card_number' => ['nullable', 'string', 'max:50'],
 
-            'branch_office_id' => ['sometimes', 'exists:branch_offices,id'],
-            'department_id' => ['sometimes', 'exists:departments,id'],
-            'position_id' => ['sometimes', 'exists:positions,id'],
-            'cost_center_id' => ['sometimes', 'exists:cost_centers,id'],
+            'branch_office_id' => ['nullable', 'exists:branch_offices,id'],
+            'department_id' => ['nullable', 'exists:departments,id'],
+            'position_id' => ['nullable', 'exists:positions,id'],
+            'cost_center_id' => ['nullable', 'exists:cost_centers,id'],
 
-            'join_date' => ['sometimes', 'date'],
-            'employment_status' => ['sometimes', 'in:permanent,contract,other'],
+            'join_date' => ['nullable', 'date'],
+            'employment_status' => ['nullable', 'in:permanent,contract,other'],
             'contract_start' => ['nullable', 'date'],
             'contract_end' => ['nullable', 'date'],
 
-            'late_deduction' => ['sometimes', 'numeric'],
-            'late_tolerance' => ['sometimes', 'numeric'],
-            'allow_remote_attendance' => ['sometimes', 'boolean'],
-            'allow_branch_hopping' => ['sometimes', 'boolean'],
-            'check_in_mode' => ['sometimes', 'in:card_and_photo,card_only'],
+            'late_deduction' => ['nullable', 'numeric'],
+            'late_tolerance' => ['nullable', 'numeric'],
+            'allow_remote_attendance' => ['nullable', 'boolean'],
+            'allow_branch_hopping' => ['nullable', 'boolean'],
+            'check_in_mode' => ['nullable', 'in:card_and_photo,card_only'],
 
             'profile_image' => [
                 'nullable',
@@ -82,11 +82,11 @@ class UpdateEmployeeRequest extends FormRequest
 
             'npwp' => ['nullable', 'string', 'max:255'],
             'tax_type' => ['nullable', 'string', 'max:255'],
-            'tax_deduction_amount' => ['sometimes', 'numeric'],
-            'tax_allowance_percent' => ['sometimes', 'numeric'],
+            'tax_deduction_amount' => ['nullable', 'numeric'],
+            'tax_allowance_percent' => ['nullable', 'numeric'],
 
-            'bank_name' => ['sometimes', 'string', 'max:255'],
-            'bank_account_number' => ['sometimes', 'string', 'max:255'],
+            'bank_name' => ['nullable', 'string', 'max:255'],
+            'bank_account_number' => ['nullable', 'string', 'max:255'],
 
             'bpjs_tk_number' => ['nullable', 'string', 'max:255'],
             'bpjs_kes_number' => ['nullable', 'string', 'max:255'],
