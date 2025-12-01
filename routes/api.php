@@ -134,6 +134,10 @@ Route::middleware('auth:sanctum')->group(function () {
                 ->middleware('permission:create master data employees')
                 ->name('api.employees.store');
 
+            Route::get('/search', [\App\Http\Controllers\Api\MasterData\EmployeeController::class, 'search'])
+                ->middleware('permission:create master data employees')
+                ->name('api.employees.search');
+
             Route::prefix('{employee}')->group(function () {
                 Route::get('/', [\App\Http\Controllers\Api\MasterData\EmployeeController::class, 'show'])
                     ->middleware('permission:create master data employees')
@@ -144,6 +148,27 @@ Route::middleware('auth:sanctum')->group(function () {
                 Route::delete('/', [\App\Http\Controllers\Api\MasterData\EmployeeController::class, 'destroy'])
                     ->middleware('permission:create master data employees')
                     ->name('api.employees.destroy');
+            });
+        });
+
+        Route::prefix('salaries')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Api\MasterData\SalaryController::class, 'index'])
+                ->middleware('permission:create master data employees')
+                ->name('api.salaries.index');
+            Route::post('/', [\App\Http\Controllers\Api\MasterData\SalaryController::class, 'store'])
+                ->middleware('permission:create master data employees')
+                ->name('api.salaries.store');
+
+            Route::prefix('{salary}')->group(function () {
+                Route::get('/', [\App\Http\Controllers\Api\MasterData\SalaryController::class, 'show'])
+                    ->middleware('permission:create master data employees')
+                    ->name('api.salaries.show');
+                Route::put('/', [\App\Http\Controllers\Api\MasterData\SalaryController::class, 'update'])
+                    ->middleware('permission:update master data employees')
+                    ->name('api.salaries.update');
+                Route::delete('/', [\App\Http\Controllers\Api\MasterData\SalaryController::class, 'destroy'])
+                    ->middleware('permission:create master data employees')
+                    ->name('api.salaries.destroy');
             });
         });
 

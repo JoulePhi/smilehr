@@ -69,6 +69,36 @@ class EmployeeController extends Controller
         //
     }
 
+
+    public function search(Request $request)
+    {
+        try {
+            $search = $request->get('query', '');
+            $departments = User::where(function ($query) use ($search) {
+                $query->where('name', 'like', "%$search%")
+                    ->orWhere('email', 'like', "%$search%")
+                    ->orWhere('nik', 'like', "%$search%")
+                    ->orWhere('phone', 'like', "%$search%");
+            })
+                ->employee()
+                ->where('company_id', $this->tenantService->getCompanyId())
+                ->limit(5)
+                ->get();
+            return response()->json([
+                'success' => true,
+                'message' => 'Employees retrieved successfully.',
+                'data' => EmployeeResource::collection($departments)
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Employee search failed', ['error' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve employees.',
+                'data' => null
+            ], 500);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      */
