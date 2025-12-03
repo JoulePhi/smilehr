@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\Api\MasterData;
 
+use App\Exports\UsersTemplateExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\MasterData\StoreSalaryRequest;
 use App\Http\Requests\Api\MasterData\UpdateSalaryRequest;
 use App\Http\Resources\Api\MasterData\SalaryResource;
+use App\Imports\FinancialsImport;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpKernel\HttpCache\Store;
 
 class SalaryController extends Controller
@@ -115,6 +118,22 @@ class SalaryController extends Controller
     public function edit(string $id)
     {
         //
+    }
+
+    public function downloadTemplate()
+    {
+        return Excel::download(new UsersTemplateExport, 'financial_update_template.xlsx');
+    }
+
+    public function importFinancials(Request $request)
+    {
+        $request->validate(['file' => 'required|mimes:xlsx,xls']);
+
+        try {
+            Excel::import(new FinancialsImport, $request->file('file'));
+            return response()->json(['message' => 'Financial data updated successfully']);
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+        }
     }
 
     /**

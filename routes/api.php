@@ -6,6 +6,12 @@ use Illuminate\Support\Facades\Route;
 Route::post('/auth/register', [\App\Http\Controllers\Api\AuthController::class, 'register']);
 Route::post('/auth/login', [\App\Http\Controllers\Api\AuthController::class, 'login']);
 
+Route::get('/template/salaries/download', [\App\Http\Controllers\Api\MasterData\SalaryController::class, 'downloadTemplate'])
+    ->name('api.template.salaries.download');
+
+Route::post('/template/salaries/import', [\App\Http\Controllers\Api\MasterData\SalaryController::class, 'importFinancials'])
+    ->name('api.salaries.import');
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/auth/logout', [\App\Http\Controllers\Api\AuthController::class, 'logout']);
     Route::get('/auth/profile', [\App\Http\Controllers\Api\AuthController::class, 'profile']);
@@ -158,6 +164,8 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::post('/', [\App\Http\Controllers\Api\MasterData\SalaryController::class, 'store'])
                 ->middleware('permission:create master data employees')
                 ->name('api.salaries.store');
+
+
 
             Route::prefix('{salary}')->group(function () {
                 Route::get('/', [\App\Http\Controllers\Api\MasterData\SalaryController::class, 'show'])
