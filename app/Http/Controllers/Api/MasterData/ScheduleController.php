@@ -2,17 +2,22 @@
 
 namespace App\Http\Controllers\Api\MasterData;
 
+use App\Exports\SchedulesExport;
+use App\Exports\SchedulesTemplateExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\MasterData\StoreScheduleRequest;
 use App\Http\Requests\Api\MasterData\UpdateScheduleRequest;
 use App\Http\Resources\Api\MasterData\ScheduleResource;
+use App\Imports\SchedulesImport;
 use App\Models\Schedule;
 use App\Services\TenantService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ScheduleController extends Controller
 {
@@ -177,5 +182,45 @@ class ScheduleController extends Controller
                 'error' => $e->getMessage(),
             ], 500);
         }
+    }
+
+    public function downloadTemplate()
+    {
+        return Excel::download(new SchedulesTemplateExport, 'schedules_template.xlsx');
+    }
+    public function exportSchedules()
+    {
+        return Excel::download(new SchedulesExport, 'schedules.xlsx');
+    }
+    public function importSchedules(Request $request)
+    {
+        $request->validate(['file' => 'required|mimes:xlsx,xls']);
+
+        try {
+            Excel::import(new SchedulesImport, $request->file('file'));
+            return response()->json([
+                'success' => true,
+                'message' => 'Schedules imported successfully.',
+                'data' => null
+            ]);
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            Log::error('Schedule import validation failed', ['errors' => $e->errors()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed during import.',
+                'errors' => $e->errors(),
+            ], 422);
+        }
+    }
+
+    public function printSchedules()
+    {
+        $schedules =  Schedule::with('user')->get();
+
+        $pdf = Pdf::loadView('exports.schedules-pdf', [
+            'schedules' => $schedules
+        ]);
+
+        return $pdf->download('schedules.pdf');
     }
 }

@@ -6,11 +6,26 @@ use Illuminate\Support\Facades\Route;
 Route::post('/auth/register', [\App\Http\Controllers\Api\AuthController::class, 'register']);
 Route::post('/auth/login', [\App\Http\Controllers\Api\AuthController::class, 'login']);
 
-Route::get('/template/salaries/download', [\App\Http\Controllers\Api\MasterData\SalaryController::class, 'downloadTemplate'])
-    ->name('api.template.salaries.download');
 
-Route::post('/template/salaries/import', [\App\Http\Controllers\Api\MasterData\SalaryController::class, 'importFinancials'])
-    ->name('api.salaries.import');
+
+Route::prefix('templates')->group(function () {
+    Route::get('/salaries/download', [\App\Http\Controllers\Api\MasterData\SalaryController::class, 'downloadTemplate'])
+        ->name('api.template.salaries.download');
+
+    Route::post('/salaries/import', [\App\Http\Controllers\Api\MasterData\SalaryController::class, 'importFinancials'])
+        ->name('api.salaries.import');
+
+    Route::get('/schedules/download', [\App\Http\Controllers\Api\MasterData\ScheduleController::class, 'downloadTemplate'])
+        ->name('api.template.schedules.download');
+
+    Route::post('/schedules/import', [\App\Http\Controllers\Api\MasterData\ScheduleController::class, 'importSchedules'])
+        ->name('api.schedules.import');
+
+    Route::get('/schedules/export', [\App\Http\Controllers\Api\MasterData\ScheduleController::class, 'exportSchedules'])
+        ->name('api.schedules.export');
+    Route::get('/schedules/print', [\App\Http\Controllers\Api\MasterData\ScheduleController::class, 'printSchedules'])
+        ->name('api.schedules.print');
+});
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/auth/logout', [\App\Http\Controllers\Api\AuthController::class, 'logout']);

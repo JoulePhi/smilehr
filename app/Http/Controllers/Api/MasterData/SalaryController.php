@@ -131,8 +131,18 @@ class SalaryController extends Controller
 
         try {
             Excel::import(new FinancialsImport, $request->file('file'));
-            return response()->json(['message' => 'Financial data updated successfully']);
+            return response()->json([
+                'success' => true,
+                'message' => 'Financial data updated successfully.',
+                'data' => null
+            ]);
         } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            Log::error('Financial import validation failed', ['errors' => $e->errors()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed during import.',
+                'errors' => $e->errors(),
+            ], 422);
         }
     }
 
