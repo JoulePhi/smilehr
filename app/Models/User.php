@@ -14,7 +14,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
-
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -117,8 +117,15 @@ class User extends Authenticatable
         return $this->belongsTo(CostCenter::class, 'cost_center_id', 'id');
     }
 
-
-
+    /**
+     * Get all of the schedules for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function schedules(): HasMany
+    {
+        return $this->hasMany(Schedule::class, 'user_id', 'id');
+    }
 
     #[Scope]
     protected function employee(Builder $query): void

@@ -134,49 +134,68 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::prefix('employees')->group(function () {
             Route::get('/', [\App\Http\Controllers\Api\MasterData\EmployeeController::class, 'index'])
-                ->middleware('permission:create master data employees')
+                ->middleware('permission:view master data employees')
                 ->name('api.employees.index');
             Route::post('/', [\App\Http\Controllers\Api\MasterData\EmployeeController::class, 'store'])
                 ->middleware('permission:create master data employees')
                 ->name('api.employees.store');
 
             Route::get('/search', [\App\Http\Controllers\Api\MasterData\EmployeeController::class, 'search'])
-                ->middleware('permission:create master data employees')
+                ->middleware('permission:view master data employees')
                 ->name('api.employees.search');
 
             Route::prefix('{employee}')->group(function () {
                 Route::get('/', [\App\Http\Controllers\Api\MasterData\EmployeeController::class, 'show'])
-                    ->middleware('permission:create master data employees')
+                    ->middleware('permission:view master data employees')
                     ->name('api.employees.show');
                 Route::put('/', [\App\Http\Controllers\Api\MasterData\EmployeeController::class, 'update'])
                     ->middleware('permission:update master data employees')
                     ->name('api.employees.update');
                 Route::delete('/', [\App\Http\Controllers\Api\MasterData\EmployeeController::class, 'destroy'])
-                    ->middleware('permission:create master data employees')
+                    ->middleware('permission:delete master data employees')
                     ->name('api.employees.destroy');
             });
         });
 
         Route::prefix('salaries')->group(function () {
             Route::get('/', [\App\Http\Controllers\Api\MasterData\SalaryController::class, 'index'])
-                ->middleware('permission:create master data employees')
+                ->middleware('permission:view master data salaries')
                 ->name('api.salaries.index');
             Route::post('/', [\App\Http\Controllers\Api\MasterData\SalaryController::class, 'store'])
-                ->middleware('permission:create master data employees')
+                ->middleware('permission:create master data salaries')
                 ->name('api.salaries.store');
-
-
 
             Route::prefix('{user}')->group(function () {
                 Route::get('/', [\App\Http\Controllers\Api\MasterData\SalaryController::class, 'show'])
-                    ->middleware('permission:create master data employees')
+                    ->middleware('permission:view master data salaries')
                     ->name('api.salaries.show');
                 Route::put('/', [\App\Http\Controllers\Api\MasterData\SalaryController::class, 'update'])
-                    ->middleware('permission:update master data employees')
+                    ->middleware('permission:update master data salaries')
                     ->name('api.salaries.update');
                 Route::delete('/', [\App\Http\Controllers\Api\MasterData\SalaryController::class, 'destroy'])
-                    ->middleware('permission:create master data employees')
+                    ->middleware('permission:delete master data salaries')
                     ->name('api.salaries.destroy');
+            });
+        });
+
+        Route::prefix('schedules')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Api\MasterData\ScheduleController::class, 'index'])
+                ->middleware('permission:view master data schedules')
+                ->name('api.schedules.index');
+            Route::post('/', [\App\Http\Controllers\Api\MasterData\ScheduleController::class, 'store'])
+                ->middleware('permission:create master data schedules')
+                ->name('api.schedules.store');
+
+            Route::prefix('{schedule}')->group(function () {
+                Route::get('/', [\App\Http\Controllers\Api\MasterData\ScheduleController::class, 'show'])
+                    ->middleware('permission:view master data schedules')
+                    ->name('api.schedules.show');
+                Route::put('/', [\App\Http\Controllers\Api\MasterData\ScheduleController::class, 'update'])
+                    ->middleware('permission:update master data schedules')
+                    ->name('api.schedules.update');
+                Route::delete('/', [\App\Http\Controllers\Api\MasterData\ScheduleController::class, 'destroy'])
+                    ->middleware('permission:delete master data schedules')
+                    ->name('api.schedules.destroy');
             });
         });
 
