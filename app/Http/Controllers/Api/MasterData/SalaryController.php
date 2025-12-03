@@ -139,59 +139,50 @@ class SalaryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateSalaryRequest $request)
+    public function update(UpdateSalaryRequest $request, User $user)
     {
         try {
+            Log::info('Updating salary', ['user' => $user]);
             DB::beginTransaction();
+            $salaryData = $request->validated();
+            $user->financial()->update([
+                'basic_salary' => $salaryData['basic_salary'],
+                'routine_dues' => $salaryData['routine_dues'],
+                'fixed_allowance' => $salaryData['fixed_allowance'],
+                'other_allowance' => $salaryData['other_allowance'],
+                'daily_allowance' => $salaryData['daily_allowance'],
+                'hourly_wages_based_on' => $salaryData['hourly_wages_based_on'],
+                'hourly_deduction_based_on' => $salaryData['hourly_deduction_based_on'],
+                'overtime_need_approval' => $salaryData['overtime_need_approval'],
+                'overtime_calculation_method' => $salaryData['overtime_calculation_mode'],
+                'weekday_pattern' => $salaryData['weekday_pattern'] ?? null,
+                'overtime_multiplier' => $salaryData['overtime_multiplier'] ?? null,
+                'special_overtime_multiplier' => $salaryData['special_overtime_multiplier'] ?? null,
+                'daily_late_deduction_amount' => $salaryData['daily_late_deductions'],
+                'daily_overtime_incentive' => $salaryData['daily_overtime_incentive'],
+                'daily_leave_balance_incentive' => $salaryData['daily_leave_balance_incentive'],
 
-            $salariesData = $request->input('salaries', []);
-            $updatedSalaries = [];
-            foreach ($salariesData as $salaryData) {
-                if (empty($salaryData['employeeId'])) {
-                    Log::warning('Skipping salary creation due to missing employeeId', ['salaryData' => $salaryData]);
-                    continue;
-                }
+                'bpjs_jht_user_percent' => $salaryData['bpjs_jht_user_percent'] ?? 0,
+                'bpjs_health_user_percent' => $salaryData['bpjs_health_user_percent'] ?? 0,
+                'bpjs_jp_user_percent' => $salaryData['bpjs_jp_user_percent'] ?? 0,
+                'others_user_percent' => $salaryData['others_user_percent'] ?? 0,
+                'bpjs_jht_company_percent' => $salaryData['bpjs_jht_company_percent'] ?? 0,
+                'bpjs_health_company_percent' => $salaryData['bpjs_health_company_percent'] ?? 0,
+                'bpjs_jp_company_percent' => $salaryData['bpjs_jp_company_percent'] ?? 0,
+                'others_company_percent' => $salaryData['others_company_percent'] ?? 0,
+                'bpjs_jkm_percent' => $salaryData['bpjs_jkm_percent'] ?? 0,
+                'bpjs_jkk_percent' => $salaryData['bpjs_jkk_percent'] ?? 0,
+                'total_salary' => $salaryData['total_salary'] ?? 0,
+            ]);
 
-                $employee = User::find($salaryData['employeeId']);
-                if (!$employee) {
-                    Log::warning('Employee not found for salary creation', ['employeeId' => $salaryData['employeeId']]);
-                    continue;
-                }
-
-                $upsertData = [
-                    'basic_salary' => $salaryData['basicSalary'],
-                    'routine_dues' => $salaryData['regularDues'] ?? 0,
-                    'fixed_allowance' => $salaryData['fixedAllowance'] ?? 0,
-                    'other_allowance' => $salaryData['otherAllowance'] ?? 0,
-                    'daily_allowance' => $salaryData['dailyAllowance'] ?? 0,
-                    'bpjs_jht_user' => $salaryData['bpjsJhtUser'] ?? 0,
-                    'bpjs_health_user' => $salaryData['bpjsHealthUser'] ?? 0,
-                    'bpjs_jp_user' => $salaryData['bpjsJpUser'] ?? 0,
-                    'others_user' => $salaryData['othersUser'] ?? 0,
-                    'bpjs_jht_company' => $salaryData['bpjsJhtCompany'] ?? 0,
-                    'bpjs_health_company' => $salaryData['bpjsHealthCompany'] ?? 0,
-                    'bpjs_jp_company' => $salaryData['bpjsJpCompany'] ?? 0,
-                    'others_company' => $salaryData['othersCompany'] ?? 0,
-                    'bpjs_jkm' => $salaryData['bpjsJkm'] ?? 0,
-                    'bpjs_jkk' => $salaryData['bpjsJkk'] ?? 0,
-                ];
-
-
-                $employee->financial()->updateOrCreate(
-                    ['user_id' => $employee->id],
-                    $upsertData
-                );
-
-                $updatedSalaries[] = $employee->financial;
-            }
 
             DB::commit();
-            Log::info('Salary updated', ['salary_count' => count($updatedSalaries)]);
+            Log::info('Salary updated', ['user_id' => $user->id]);
 
             return response()->json([
                 'success' => true,
                 'message' => 'Salary updated successfully.',
-                'data' => SalaryResource::collection($updatedSalaries)
+                'data' => new SalaryResource($user->financial)
             ]);
         } catch (\Exception $e) {
             DB::rollBack();

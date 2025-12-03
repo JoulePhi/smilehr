@@ -22,28 +22,41 @@ class UpdateSalaryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'salaries' => ['required', 'array', 'min:1'],
 
-            'salaries.*.employee_id' => ['required', 'string', 'exists:users,id'],
-            'salaries.*.basic_salary' => ['required', 'numeric', 'min:0'],
-            'salaries.*.regular_dues' => ['nullable', 'numeric', 'min:0'],
+            'basic_salary' => ['required', 'numeric'],
+            'total_salary' => ['required', 'numeric'],
+            'routine_dues' => ['required', 'numeric'],
+            'fixed_allowance' => ['required', 'numeric'],
+            'other_allowance' => ['required', 'numeric'],
+            'daily_allowance' => ['required', 'numeric'],
 
-            'salaries.*.fixed_allowance' => ['nullable', 'numeric', 'min:0'],
-            'salaries.*.other_allowance' => ['nullable', 'numeric', 'min:0'],
-            'salaries.*.daily_allowance' => ['nullable', 'numeric', 'min:0'],
+            'hourly_wages_based_on' => ['required', 'string'],
+            'total_hourly_wages' => ['required', 'numeric'],
+            'overtime_need_approval' => ['required', 'numeric'],
+            'overtime_calculation_mode' => ['required', 'string'],
 
-            'salaries.*.bpjs_jht_user' => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'salaries.*.bpjs_health_user' => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'salaries.*.bpjs_jp_user' => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'salaries.*.others_user' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'weekday_pattern' => ['nullable', 'string'],
+            'overtime_multiplier' => ['nullable', 'numeric'],
+            'special_overtime_multiplier' => ['nullable', 'numeric'],
 
-            'salaries.*.bpjs_jht_company' => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'salaries.*.bpjs_health_company' => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'salaries.*.bpjs_jp_company' => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'salaries.*.others_company' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'hourly_deduction_based_on' => ['required', 'string'],
+            'total_hourly_deduction' => ['required', 'numeric'],
+            'daily_late_deductions' => ['required', 'numeric'],
+            'daily_overtime_incentive' => ['required', 'numeric'],
+            'daily_leave_balance_incentive' => ['required', 'numeric'],
 
-            'salaries.*.bpjs_jkm' => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'salaries.*.bpjs_jkk' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'bpjs_jht_user_percent' => ['nullable', 'numeric'],
+            'bpjs_health_user_percent' => ['nullable', 'numeric'],
+            'bpjs_jp_user_percent' => ['nullable', 'numeric'],
+            'others_user_percent' => ['nullable', 'numeric'],
+
+            'bpjs_jht_company_percent' => ['nullable', 'numeric'],
+            'bpjs_health_company_percent' => ['nullable', 'numeric'],
+            'bpjs_jp_company_percent' => ['nullable', 'numeric'],
+            'others_company_percent' => ['nullable', 'numeric'],
+
+            'bpjs_jkm_percent' => ['nullable', 'numeric'],
+            'bpjs_jkk_percent' => ['nullable', 'numeric'],
         ];
     }
 }

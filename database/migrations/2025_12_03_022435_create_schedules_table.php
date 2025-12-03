@@ -13,6 +13,18 @@ return new class extends Migration
     {
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->date('scheduled_date');
+            $table->time('shift_in');
+            $table->time('shift_out');
+            $table->text('remarks');
+            $table->boolean('is_approved')->default(false);
+            $table->boolean('is_validated')->default(false);
+            $table->unsignedBigInteger('approved_by')->nullable();
+            $table->unsignedBigInteger('validated_by')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('approved_by')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('validated_by')->references('id')->on('users')->onDelete('set null');
             $table->timestamps();
         });
     }

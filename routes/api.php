@@ -167,7 +167,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
 
-            Route::prefix('{salary}')->group(function () {
+            Route::prefix('{user}')->group(function () {
                 Route::get('/', [\App\Http\Controllers\Api\MasterData\SalaryController::class, 'show'])
                     ->middleware('permission:create master data employees')
                     ->name('api.salaries.show');
