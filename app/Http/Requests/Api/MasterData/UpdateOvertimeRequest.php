@@ -4,14 +4,14 @@ namespace App\Http\Requests\Api\MasterData;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateScheduleRequest extends FormRequest
+class UpdateOvertimeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return $this->user()->can('update master data schedules');
+        return $this->user()->can('update master data overtimes');
     }
 
     /**
@@ -25,10 +25,11 @@ class UpdateScheduleRequest extends FormRequest
             'shift_in_date' => ['sometimes', 'required', 'date'],
             'shift_out_date' => ['sometimes', 'required', 'date', 'after_or_equal:shift_in_date'],
             'shift_in' => ['sometimes', 'required', 'date_format:H:i:s'],
-            'shift_out' => ['sometimes', 'required', 'date_format:H:i:'],
+            'shift_out' => ['sometimes', 'required', 'date_format:H:i:s'],
             'remarks' => ['nullable', 'string'],
             'is_approved' => ['nullable', 'boolean'],
             'is_validated' => ['nullable', 'boolean'],
+            'is_special' => ['sometimes', 'boolean'],
         ];
     }
 }

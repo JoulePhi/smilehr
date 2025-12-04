@@ -25,6 +25,18 @@ Route::prefix('templates')->group(function () {
         ->name('api.schedules.export');
     Route::get('/schedules/print', [\App\Http\Controllers\Api\MasterData\ScheduleController::class, 'printSchedules'])
         ->name('api.schedules.print');
+
+
+    Route::get('/overtimes/download', [\App\Http\Controllers\Api\MasterData\OvertimeController::class, 'downloadTemplate'])
+        ->name('api.template.overtimes.download');
+
+    Route::post('/overtimes/import', [\App\Http\Controllers\Api\MasterData\OvertimeController::class, 'importOvertimes'])
+        ->name('api.overtimes.import');
+
+    Route::get('/overtimes/export', [\App\Http\Controllers\Api\MasterData\OvertimeController::class, 'exportOvertimes'])
+        ->name('api.overtimes.export');
+    Route::get('/overtimes/print', [\App\Http\Controllers\Api\MasterData\OvertimeController::class, 'printOvertimes'])
+        ->name('api.overtimes.print');
 });
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -211,6 +223,27 @@ Route::middleware('auth:sanctum')->group(function () {
                 Route::delete('/', [\App\Http\Controllers\Api\MasterData\ScheduleController::class, 'destroy'])
                     ->middleware('permission:delete master data schedules')
                     ->name('api.schedules.destroy');
+            });
+        });
+
+        Route::prefix('overtimes')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Api\MasterData\OvertimeController::class, 'index'])
+                ->middleware('permission:view master data overtimes')
+                ->name('api.overtimes.index');
+            Route::post('/', [\App\Http\Controllers\Api\MasterData\OvertimeController::class, 'store'])
+                ->middleware('permission:create master data overtimes')
+                ->name('api.overtimes.store');
+
+            Route::prefix('{overtime}')->group(function () {
+                Route::get('/', [\App\Http\Controllers\Api\MasterData\OvertimeController::class, 'show'])
+                    ->middleware('permission:view master data overtimes')
+                    ->name('api.overtimes.show');
+                Route::put('/', [\App\Http\Controllers\Api\MasterData\OvertimeController::class, 'update'])
+                    ->middleware('permission:update master data overtimes')
+                    ->name('api.overtimes.update');
+                Route::delete('/', [\App\Http\Controllers\Api\MasterData\OvertimeController::class, 'destroy'])
+                    ->middleware('permission:delete master data overtimes')
+                    ->name('api.overtimes.destroy');
             });
         });
 
