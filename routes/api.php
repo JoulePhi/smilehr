@@ -350,4 +350,27 @@ Route::middleware('auth:sanctum')->group(function () {
                 ->name('api.roles.available-permissions');
         });
     });
+
+    Route::prefix('transaction')->group(function () {
+        Route::prefix('leaves')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Api\Transaction\LeaveController::class, 'index'])
+                ->middleware('permission:view transactions leaves')
+                ->name('api.leaves.index');
+            Route::post('/', [\App\Http\Controllers\Api\Transaction\LeaveController::class, 'store'])
+                ->middleware('permission:create transactions leaves')
+                ->name('api.leaves.store');
+
+            Route::prefix('{leave}')->group(function () {
+                Route::get('/', [\App\Http\Controllers\Api\Transaction\LeaveController::class, 'show'])
+                    ->middleware('permission:view transactions leaves')
+                    ->name('api.leaves.show');
+                Route::put('/', [\App\Http\Controllers\Api\Transaction\LeaveController::class, 'update'])
+                    ->middleware('permission:update transactions leaves')
+                    ->name('api.leaves.update');
+                Route::delete('/', [\App\Http\Controllers\Api\Transaction\LeaveController::class, 'destroy'])
+                    ->middleware('permission:delete transactions leaves')
+                    ->name('api.leaves.destroy');
+            });
+        });
+    });
 });
