@@ -37,6 +37,18 @@ Route::prefix('templates')->group(function () {
         ->name('api.overtimes.export');
     Route::get('/overtimes/print', [\App\Http\Controllers\Api\MasterData\OvertimeController::class, 'printOvertimes'])
         ->name('api.overtimes.print');
+
+    Route::get('/leaves/download', [\App\Http\Controllers\Api\Transaction\LeaveController::class, 'downloadTemplate'])
+        ->name('api.template.leaves.download');
+
+    Route::post('/leaves/import', [\App\Http\Controllers\Api\Transaction\LeaveController::class, 'importLeaves'])
+        ->name('api.leaves.import');
+
+    Route::get('/leaves/export', [\App\Http\Controllers\Api\Transaction\LeaveController::class, 'exportLeaves'])
+        ->name('api.leaves.export');
+
+    Route::get('/leaves/print', [\App\Http\Controllers\Api\Transaction\LeaveController::class, 'printLeaves'])
+        ->name('api.leaves.print');
 });
 
 Route::middleware('auth:sanctum')->group(function () {

@@ -2,15 +2,20 @@
 
 namespace App\Http\Controllers\Api\Transaction;
 
+use App\Exports\LeaveExport;
+use App\Exports\LeaveTemplateExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Transaction\StoreLeaveRequest;
 use App\Http\Requests\Api\Transaction\UpdateLeaveRequest;
 use App\Http\Resources\Api\Transaction\LeaveResource;
+use App\Imports\LeaveImport;
 use App\Models\Leave;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class LeaveController extends Controller
 {
@@ -169,5 +174,47 @@ class LeaveController extends Controller
                 'error' => $e->getMessage(),
             ], 500);
         }
+    }
+
+    public function downloadTemplate()
+    {
+        return Excel::download(new LeaveTemplateExport, 'leave_template.xlsx');
+    }
+
+    public function exportLeaves()
+    {
+        return Excel::download(new LeaveExport, 'leaves.xlsx');
+    }
+
+    public function importLeaves(Request $request)
+    {
+        $request->validate(['file' => 'required|mimes:xlsx,xls']);
+
+        try {
+            Excel::import(new LeaveImport, $request->file('file'));
+            return response()->json([
+                'success' => true,
+                'message' => 'Leave imported successfully.',
+                'data' => null
+            ]);
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            Log::error('Leave import validation failed', ['errors' => $e->errors()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed during import.',
+                'errors' => $e->errors(),
+            ], 422);
+        }
+    }
+
+    public function printLeaves()
+    {
+        $leaves =  Leave::with('user')->get();
+
+        $pdf = Pdf::loadView('exports.leaves-pdf', [
+            'leaves' => $leaves
+        ]);
+
+        return $pdf->download('leaves.pdf');
     }
 }

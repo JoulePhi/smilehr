@@ -2,7 +2,7 @@
 
 namespace App\Imports;
 
-use App\Models\Overtime;
+use App\Models\Leave;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -13,20 +13,25 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 
-class OvertimeImport implements ToCollection, WithHeadingRow, WithValidation, WithMapping
+class LeaveImport implements ToCollection, WithHeadingRow, WithValidation, WithMapping
 {
     public function map($row): array
     {
+        Log::info('Mapping row', ['row' => $row]);
+        $type = strtolower($row['tipe_izin_sakitizincuti'] ?? '');
+        if ($type == 'izin') {
+            $type = 'permission';
+        } else if ($type == 'sakit') {
+            $type = 'sick';
+        } else if ($type == 'cuti') {
+            $type = 'leave';
+        } else {
+            $type = 'other';
+        }
         return [
             'user_id'        => $row['id_system_jangan_diubah'] ?? $row['id'] ?? null,
-            'type' => strtolower($row['tipe_overtime_regularspecial'] ?? '') === 'special' ? 1 : 0,
-            // Convert Excel Date (number or string) to Y-m-d
-            'shift_in_date'  => $this->transformDate($row['shift_in_date_mmddyyyy'] ?? $row['shift_in_date_ddmmyyyy']),
-            'shift_in_time'  => $this->transformTime($row['shift_in_time_hhmm'] ?? $row['shift_in_time_hmm']),
-
-            'shift_out_date' => $this->transformDate($row['shift_out_date_mmddyyyy'] ?? $row['shift_out_date_ddmmyyyy']),
-            'shift_out_time' => $this->transformTime($row['shift_out_time_hhmm'] ?? $row['shift_out_time_hmm']),
-
+            'type' => $type,
+            'date'  => $this->transformDate($row['date_ddmmyyyy'] ?? $row['date_mmddyyyy']),
             'remark'         => $row['remark'] ?? null,
         ];
     }
@@ -39,13 +44,10 @@ class OvertimeImport implements ToCollection, WithHeadingRow, WithValidation, Wi
             foreach ($rows as $row) {
                 if (!$row['user_id']) continue;
 
-                Overtime::create([
+                Leave::create([
                     'user_id'       => $row['user_id'],
-                    'is_special'    => $row['type'],
-                    'shift_in_date' => $row['shift_in_date'],
-                    'shift_in'      => $row['shift_in_time'],
-                    'shift_out_date' => $row['shift_out_date'],
-                    'shift_out'     => $row['shift_out_time'],
+                    'type'    => $row['type'],
+                    'date'  => $row['date'],
                     'remarks'        => $row['remark'] ?? '',
                 ]);
             }
@@ -56,11 +58,8 @@ class OvertimeImport implements ToCollection, WithHeadingRow, WithValidation, Wi
     {
         return [
             'user_id'        => 'required|exists:users,id',
-            'type' => 'required|in:1,0',
-            'shift_in_date'  => 'required|date_format:Y-m-d',
-            'shift_in_time'  => 'required|date_format:H:i:s',
-            'shift_out_date' => 'required|date_format:Y-m-d',
-            'shift_out_time' => 'required|date_format:H:i:s',
+            'type' => 'required|in:permission,sick,leave',
+            'date'  => 'required|date_format:Y-m-d',
             'remark'         => 'nullable|string',
         ];
     }
@@ -76,7 +75,7 @@ class OvertimeImport implements ToCollection, WithHeadingRow, WithValidation, Wi
             }
             return Carbon::createFromFormat('d/m/Y', $value)->format('Y-m-d');
         } catch (\Exception $e) {
-            return null; // Invalid date
+            return null;
         }
     }
 

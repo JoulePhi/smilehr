@@ -39,7 +39,7 @@
 
 <body>
     <div class="header">
-        <h2>Schedule Report</h2>
+        <h2>Overtimes Report</h2>
     </div>
 
     <table>
