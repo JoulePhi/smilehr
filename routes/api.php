@@ -49,6 +49,19 @@ Route::prefix('templates')->group(function () {
 
     Route::get('/leaves/print', [\App\Http\Controllers\Api\Transaction\LeaveController::class, 'printLeaves'])
         ->name('api.leaves.print');
+
+
+    Route::get('/debts/download', [\App\Http\Controllers\Api\Transaction\DebtController::class, 'downloadTemplate'])
+        ->name('api.template.debts.download');
+
+    Route::post('/debts/import', [\App\Http\Controllers\Api\Transaction\DebtController::class, 'importDebts'])
+        ->name('api.debts.import');
+
+    Route::get('/debts/export', [\App\Http\Controllers\Api\Transaction\DebtController::class, 'exportDebts'])
+        ->name('api.debts.export');
+
+    Route::get('/debts/print', [\App\Http\Controllers\Api\Transaction\DebtController::class, 'printDebts'])
+        ->name('api.debts.print');
 });
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -382,6 +395,27 @@ Route::middleware('auth:sanctum')->group(function () {
                 Route::delete('/', [\App\Http\Controllers\Api\Transaction\LeaveController::class, 'destroy'])
                     ->middleware('permission:delete transactions leaves')
                     ->name('api.leaves.destroy');
+            });
+        });
+
+        Route::prefix('debts')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Api\Transaction\DebtController::class, 'index'])
+                ->middleware('permission:view transactions debts')
+                ->name('api.debts.index');
+            Route::post('/', [\App\Http\Controllers\Api\Transaction\DebtController::class, 'store'])
+                ->middleware('permission:create transactions debts')
+                ->name('api.debts.store');
+
+            Route::prefix('{debt}')->group(function () {
+                Route::get('/', [\App\Http\Controllers\Api\Transaction\DebtController::class, 'show'])
+                    ->middleware('permission:view transactions debts')
+                    ->name('api.debts.show');
+                Route::put('/', [\App\Http\Controllers\Api\Transaction\DebtController::class, 'update'])
+                    ->middleware('permission:update transactions debts')
+                    ->name('api.debts.update');
+                Route::delete('/', [\App\Http\Controllers\Api\Transaction\DebtController::class, 'destroy'])
+                    ->middleware('permission:delete transactions debts')
+                    ->name('api.debts.destroy');
             });
         });
     });
