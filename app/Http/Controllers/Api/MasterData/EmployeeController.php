@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\MasterData;
 
+use App\Exports\Reports\EmployeeExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\MasterData\StoreEmployeeRequest;
 use App\Http\Requests\Api\MasterData\UpdateEmployeeRequest;
@@ -11,9 +12,11 @@ use App\Models\User;
 use App\Models\UserFinancial;
 use App\Services\TenantService;
 use App\Services\UploadService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 
 class EmployeeController extends Controller
 {
@@ -310,5 +313,21 @@ class EmployeeController extends Controller
                 'error' => $e->getMessage(),
             ], 500);
         }
+    }
+
+    public function exportEmployees()
+    {
+        return Excel::download(new EmployeeExport, 'employees.xlsx');
+    }
+
+    public function printEmployees()
+    {
+        $employees =  User::with(['branch', 'department', 'position'])->employee()->get();
+
+        $pdf = Pdf::loadView('exports.employees-pdf', [
+            'employees' => $employees
+        ]);
+
+        return $pdf->download('employees.pdf');
     }
 }
