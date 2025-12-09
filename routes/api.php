@@ -391,6 +391,11 @@ Route::middleware('auth:sanctum')->group(function () {
                 ->middleware('permission:view reports leaves')
                 ->name('api.leaves.index');
         });
+        Route::prefix('overtimes')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Api\Reports\OvertimeController::class, 'index'])
+                ->middleware('permission:view reports overtimes')
+                ->name('api.overtimes.index');
+        });
     });
 });
 require __DIR__ . '/templates.php';

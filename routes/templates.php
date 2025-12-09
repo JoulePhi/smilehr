@@ -85,5 +85,11 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/print', [\App\Http\Controllers\Api\Reports\LeaveController::class, 'printLeavesReport'])
                 ->name('api.leaves.print');
         });
+        Route::prefix('overtimes-report')->group(function () {
+            Route::get('/export', [\App\Http\Controllers\Api\Reports\OvertimeController::class, 'exportOvertimeReports'])
+                ->name('api.overtimes.export');
+            Route::get('/print', [\App\Http\Controllers\Api\Reports\OvertimeController::class, 'printOvertimesReport'])
+                ->name('api.overtimes.print');
+        });
     });
 });
