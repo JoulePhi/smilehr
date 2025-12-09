@@ -62,6 +62,19 @@ Route::prefix('templates')->group(function () {
 
     Route::get('/debts/print', [\App\Http\Controllers\Api\Transaction\DebtController::class, 'printDebts'])
         ->name('api.debts.print');
+
+
+    Route::get('/reimbursements/download', [\App\Http\Controllers\Api\Transaction\ReimburseController::class, 'downloadTemplate'])
+        ->name('api.template.reimbursements.download');
+
+    Route::post('/reimbursements/import', [\App\Http\Controllers\Api\Transaction\ReimburseController::class, 'importReimbursements'])
+        ->name('api.reimbursements.import');
+
+    Route::get('/reimbursements/export', [\App\Http\Controllers\Api\Transaction\ReimburseController::class, 'exportReimbursements'])
+        ->name('api.reimbursements.export');
+
+    Route::get('/reimbursements/print', [\App\Http\Controllers\Api\Transaction\ReimburseController::class, 'printReimbursements'])
+        ->name('api.reimbursements.print');
 });
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -416,6 +429,27 @@ Route::middleware('auth:sanctum')->group(function () {
                 Route::delete('/', [\App\Http\Controllers\Api\Transaction\DebtController::class, 'destroy'])
                     ->middleware('permission:delete transactions debts')
                     ->name('api.debts.destroy');
+            });
+        });
+
+        Route::prefix('reimbursements')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Api\Transaction\ReimburseController::class, 'index'])
+                ->middleware('permission:view transactions reimbursements')
+                ->name('api.reimbursements.index');
+            Route::post('/', [\App\Http\Controllers\Api\Transaction\ReimburseController::class, 'store'])
+                ->middleware('permission:create transactions reimbursements')
+                ->name('api.reimbursements.store');
+
+            Route::prefix('{reimburse}')->group(function () {
+                Route::get('/', [\App\Http\Controllers\Api\Transaction\ReimburseController::class, 'show'])
+                    ->middleware('permission:view transactions reimbursements')
+                    ->name('api.reimbursements.show');
+                Route::put('/', [\App\Http\Controllers\Api\Transaction\ReimburseController::class, 'update'])
+                    ->middleware('permission:update transactions reimbursements')
+                    ->name('api.reimbursements.update');
+                Route::delete('/', [\App\Http\Controllers\Api\Transaction\ReimburseController::class, 'destroy'])
+                    ->middleware('permission:delete transactions reimbursements')
+                    ->name('api.reimbursements.destroy');
             });
         });
     });
