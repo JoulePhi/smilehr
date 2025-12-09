@@ -79,5 +79,11 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/print', [\App\Http\Controllers\Api\MasterData\EmployeeController::class, 'printEmployees'])
                 ->name('api.employees.print');
         });
+        Route::prefix('leaves-report')->group(function () {
+            Route::get('/export', [\App\Http\Controllers\Api\Reports\LeaveController::class, 'exportLeaveReports'])
+                ->name('api.leaves.export');
+            Route::get('/print', [\App\Http\Controllers\Api\Reports\LeaveController::class, 'printLeavesReport'])
+                ->name('api.leaves.print');
+        });
     });
 });

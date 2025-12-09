@@ -384,5 +384,13 @@ Route::middleware('auth:sanctum')->group(function () {
             });
         });
     });
+
+    Route::prefix('report')->group(function () {
+        Route::prefix('leaves')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Api\Reports\LeaveController::class, 'index'])
+                ->middleware('permission:view reports leaves')
+                ->name('api.leaves.index');
+        });
+    });
 });
 require __DIR__ . '/templates.php';
