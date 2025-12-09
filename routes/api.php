@@ -8,75 +8,6 @@ Route::post('/auth/login', [\App\Http\Controllers\Api\AuthController::class, 'lo
 
 
 
-Route::prefix('templates')->group(function () {
-    Route::get('/salaries/download', [\App\Http\Controllers\Api\MasterData\SalaryController::class, 'downloadTemplate'])
-        ->name('api.template.salaries.download');
-
-    Route::post('/salaries/import', [\App\Http\Controllers\Api\MasterData\SalaryController::class, 'importFinancials'])
-        ->name('api.salaries.import');
-
-    Route::get('/schedules/download', [\App\Http\Controllers\Api\MasterData\ScheduleController::class, 'downloadTemplate'])
-        ->name('api.template.schedules.download');
-
-    Route::post('/schedules/import', [\App\Http\Controllers\Api\MasterData\ScheduleController::class, 'importSchedules'])
-        ->name('api.schedules.import');
-
-    Route::get('/schedules/export', [\App\Http\Controllers\Api\MasterData\ScheduleController::class, 'exportSchedules'])
-        ->name('api.schedules.export');
-    Route::get('/schedules/print', [\App\Http\Controllers\Api\MasterData\ScheduleController::class, 'printSchedules'])
-        ->name('api.schedules.print');
-
-
-    Route::get('/overtimes/download', [\App\Http\Controllers\Api\MasterData\OvertimeController::class, 'downloadTemplate'])
-        ->name('api.template.overtimes.download');
-
-    Route::post('/overtimes/import', [\App\Http\Controllers\Api\MasterData\OvertimeController::class, 'importOvertimes'])
-        ->name('api.overtimes.import');
-
-    Route::get('/overtimes/export', [\App\Http\Controllers\Api\MasterData\OvertimeController::class, 'exportOvertimes'])
-        ->name('api.overtimes.export');
-    Route::get('/overtimes/print', [\App\Http\Controllers\Api\MasterData\OvertimeController::class, 'printOvertimes'])
-        ->name('api.overtimes.print');
-
-    Route::get('/leaves/download', [\App\Http\Controllers\Api\Transaction\LeaveController::class, 'downloadTemplate'])
-        ->name('api.template.leaves.download');
-
-    Route::post('/leaves/import', [\App\Http\Controllers\Api\Transaction\LeaveController::class, 'importLeaves'])
-        ->name('api.leaves.import');
-
-    Route::get('/leaves/export', [\App\Http\Controllers\Api\Transaction\LeaveController::class, 'exportLeaves'])
-        ->name('api.leaves.export');
-
-    Route::get('/leaves/print', [\App\Http\Controllers\Api\Transaction\LeaveController::class, 'printLeaves'])
-        ->name('api.leaves.print');
-
-
-    Route::get('/debts/download', [\App\Http\Controllers\Api\Transaction\DebtController::class, 'downloadTemplate'])
-        ->name('api.template.debts.download');
-
-    Route::post('/debts/import', [\App\Http\Controllers\Api\Transaction\DebtController::class, 'importDebts'])
-        ->name('api.debts.import');
-
-    Route::get('/debts/export', [\App\Http\Controllers\Api\Transaction\DebtController::class, 'exportDebts'])
-        ->name('api.debts.export');
-
-    Route::get('/debts/print', [\App\Http\Controllers\Api\Transaction\DebtController::class, 'printDebts'])
-        ->name('api.debts.print');
-
-
-    Route::get('/reimbursements/download', [\App\Http\Controllers\Api\Transaction\ReimburseController::class, 'downloadTemplate'])
-        ->name('api.template.reimbursements.download');
-
-    Route::post('/reimbursements/import', [\App\Http\Controllers\Api\Transaction\ReimburseController::class, 'importReimbursements'])
-        ->name('api.reimbursements.import');
-
-    Route::get('/reimbursements/export', [\App\Http\Controllers\Api\Transaction\ReimburseController::class, 'exportReimbursements'])
-        ->name('api.reimbursements.export');
-
-    Route::get('/reimbursements/print', [\App\Http\Controllers\Api\Transaction\ReimburseController::class, 'printReimbursements'])
-        ->name('api.reimbursements.print');
-});
-
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/auth/logout', [\App\Http\Controllers\Api\AuthController::class, 'logout']);
     Route::get('/auth/profile', [\App\Http\Controllers\Api\AuthController::class, 'profile']);
@@ -454,3 +385,4 @@ Route::middleware('auth:sanctum')->group(function () {
         });
     });
 });
+require __DIR__ . '/templates.php';

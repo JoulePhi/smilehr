@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\MasterData;
 
+use App\Exports\Reports\BranchesExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\MasterData\StoreBranchRequest;
 use App\Http\Requests\Api\MasterData\UpdateBranchRequest;
@@ -10,8 +11,10 @@ use App\Services\MasterData\BranchOfficeService;
 use Illuminate\Http\{JsonResponse, Request};
 use App\Models\BranchOffice;
 use App\Services\TenantService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BranchController extends Controller
 {
@@ -236,5 +239,21 @@ class BranchController extends Controller
                 'data' => null
             ], 500);
         }
+    }
+
+    public function exportBranches()
+    {
+        return Excel::download(new BranchesExport, 'branches.xlsx');
+    }
+
+    public function printBranches()
+    {
+        $branches =  BranchOffice::all();
+
+        $pdf = Pdf::loadView('exports.branches-pdf', [
+            'branches' => $branches
+        ]);
+
+        return $pdf->download('branches.pdf');
     }
 }
