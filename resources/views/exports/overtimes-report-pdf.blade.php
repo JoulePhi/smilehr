@@ -66,7 +66,7 @@
                     $formattedDate = $overtime->periode ? $overtime->periode->format('M, Y') : '';
                     $overtime_fee = 0;
                     if ($overtime->user->financial) {
-                        $overtime_fee = app(\App\Services\Report\OvertimeService::class)->calculateFee(
+                        $overtime_fee = app(\App\Services\OvertimeService::class)->calculateFee(
                             $overtime->user->financial->overtime_calculation_method,
                             $overtime->user->financial->hourly_wages_based_on,
                             $overtime->user->financial->basic_salary,

@@ -401,6 +401,12 @@ Route::middleware('auth:sanctum')->group(function () {
                 ->middleware('permission:view reports debts')
                 ->name('api.debts.index');
         });
+
+        Route::prefix('reimbursements')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Api\Reports\ReimbursementController::class, 'index'])
+                ->middleware('permission:view reports reimbursements')
+                ->name('api.reimbursements.index');
+        });
     });
 });
 require __DIR__ . '/templates.php';

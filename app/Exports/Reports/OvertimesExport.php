@@ -16,7 +16,7 @@ class OvertimesExport implements FromCollection, WithHeadings, WithMapping,  Sho
 {
     public function collection()
     {
-        $overtimeService = new \App\Services\Report\OvertimeService();
+        $overtimeService = new \App\Services\OvertimeService();
         return $overtimeService->getReportsData(null, null, null, 'periode', 'desc');
     }
 
@@ -46,7 +46,7 @@ class OvertimesExport implements FromCollection, WithHeadings, WithMapping,  Sho
         $overtime_fee = 0;
 
         if ($overtime->user->financial) {
-            $overtime_fee = app(\App\Services\Report\OvertimeService::class)->calculateFee(
+            $overtime_fee = app(\App\Services\OvertimeService::class)->calculateFee(
                 $overtime->user->financial->overtime_calculation_method,
                 $overtime->user->financial->hourly_wages_based_on,
                 $overtime->user->financial->basic_salary,

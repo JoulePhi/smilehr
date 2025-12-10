@@ -1,0 +1,36 @@
+<?php
+
+namespace App\Services;
+
+use App\Models\Reimburse;
+use Illuminate\Support\Facades\DB;
+
+class ReimbursementService
+{
+    public function getReportsData($page, $perPage, $search, $sortBy, $sortOrder)
+    {
+        $query = Reimburse::query();
+        $query->select(
+            DB::raw("DATE_FORMAT(date, '%Y-%m') as periode"),
+            'user_id',
+            DB::raw("SUM(amount) as total_reimburse_amount"),
+        );
+
+        if ($search) {
+            $query->whereHas('user', function ($q) use ($search) {
+                $q->where('name', 'like', "%$search%");
+            });
+        }
+
+        $query->groupBy('periode', 'user_id');
+
+        $query->orderBy($sortBy, $sortOrder);
+
+        if ($page && $perPage) {
+            $debts = $query->with(['user', 'user.branch', 'user.department', 'user.position'])->paginate($perPage, ['*'], 'page', $page);
+        } else {
+            $debts = $query->with(['user', 'user.branch', 'user.department', 'user.position'])->get();
+        }
+        return $debts;
+    }
+}

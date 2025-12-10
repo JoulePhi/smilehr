@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\Reports;
 use App\Exports\Reports\DebtsExport;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\Reports\DebtResource;
-use App\Services\Report\DebtService;
+use App\Services\DebtService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;

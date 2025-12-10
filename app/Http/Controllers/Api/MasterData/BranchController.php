@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\MasterData\StoreBranchRequest;
 use App\Http\Requests\Api\MasterData\UpdateBranchRequest;
 use App\Http\Resources\Api\MasterData\BranchResource;
-use App\Services\MasterData\BranchOfficeService;
+use App\Services\BranchOfficeService;
 use Illuminate\Http\{JsonResponse, Request};
 use App\Models\BranchOffice;
 use App\Services\TenantService;

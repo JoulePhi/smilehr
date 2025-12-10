@@ -23,7 +23,7 @@ class LeavesExport implements FromCollection, WithHeadings, WithMapping,  Should
 
     public function collection()
     {
-        $leaveService = new \App\Services\Report\LeaveService();
+        $leaveService = new \App\Services\LeaveService();
         return $leaveService->getReportsData(null, null, null, 'periode', 'desc');
     }
 

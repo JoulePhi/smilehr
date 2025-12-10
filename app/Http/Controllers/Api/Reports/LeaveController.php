@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Leave;
 use Illuminate\Http\Request;
 use App\Http\Resources\Api\Reports\LeaveResource;
-use App\Services\Report\LeaveService;
+use App\Services\LeaveService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\MasterData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\MasterData\{StoreRoleRequest, UpdateRoleRequest, BulkOperationRequest};
 use App\Http\Resources\Api\MasterData\{RoleResource, RoleWithPermissionsResource, RoleStatsResource};
-use App\Services\MasterData\RoleService;
+use App\Services\RoleService;
 use Illuminate\Http\{JsonResponse, Request};
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\{Cache, DB, Log};

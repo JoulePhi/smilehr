@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\MasterData\StoreBannerRequest;
 use App\Http\Requests\Api\MasterData\UpdateBannerRequest;
 use App\Models\Banner;
-use App\Services\MasterData\HomeService;
+use App\Services\HomeService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

@@ -12,12 +12,12 @@ use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class DebtsExport implements FromCollection, WithHeadings, WithMapping,  ShouldAutoSize, WithStyles, WithColumnFormatting
+class ReimbursesExport implements FromCollection, WithHeadings, WithMapping,  ShouldAutoSize, WithStyles, WithColumnFormatting
 {
     public function collection()
     {
-        $debtService = new \App\Services\DebtService();
-        return $debtService->getReportsData(null, null, null, 'periode', 'desc');
+        $reimburseService = new \App\Services\ReimbursementService();
+        return $reimburseService->getReportsData(null, null, null, 'periode', 'desc');
     }
 
     public function headings(): array
@@ -39,18 +39,18 @@ class DebtsExport implements FromCollection, WithHeadings, WithMapping,  ShouldA
         ];
     }
 
-    public function map($debt): array
+    public function map($reimburse): array
     {
 
 
 
         return [
-            $debt->periode,
-            $debt->user->name ? Str::title($debt->user->name) : '-',
-            $debt->user->branch ? Str::title($debt->user->branch->name) : '-',
-            $debt->user->department ? Str::title($debt->user->department->name) : '-',
-            $debt->user->position ? Str::title($debt->user->position->name) : '-',
-            (int) $debt->total_debt_amount,
+            $reimburse->periode,
+            $reimburse->user->name ? Str::title($reimburse->user->name) : '-',
+            $reimburse->user->branch ? Str::title($reimburse->user->branch->name) : '-',
+            $reimburse->user->department ? Str::title($reimburse->user->department->name) : '-',
+            $reimburse->user->position ? Str::title($reimburse->user->position->name) : '-',
+            (int) $reimburse->total_reimburse_amount,
         ];
     }
 

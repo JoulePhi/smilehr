@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\Reports;
 use App\Exports\Reports\OvertimesExport;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\Reports\OvertimeResource;
-use App\Services\Report\OvertimeService;
+use App\Services\OvertimeService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;

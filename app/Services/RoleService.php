@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\MasterData;
+namespace App\Services;
 
 use App\Models\User;
 use Illuminate\Support\Facades\DB;

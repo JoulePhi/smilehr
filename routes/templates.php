@@ -98,5 +98,11 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/print', [\App\Http\Controllers\Api\Reports\DebtController::class, 'printDebtReport'])
                 ->name('api.debts.print');
         });
+        Route::prefix('reimbursements-report')->group(function () {
+            Route::get('/export', [\App\Http\Controllers\Api\Reports\ReimbursementController::class, 'exportReimburseReports'])
+                ->name('api.reimbursements.export');
+            Route::get('/print', [\App\Http\Controllers\Api\Reports\ReimbursementController::class, 'printReimburseReport'])
+                ->name('api.reimbursements.print');
+        });
     });
 });

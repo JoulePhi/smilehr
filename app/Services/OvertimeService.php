@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Report;
+namespace App\Services;
 
 use App\Models\Leave;
 use App\Models\Overtime;
