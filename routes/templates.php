@@ -91,5 +91,12 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/print', [\App\Http\Controllers\Api\Reports\OvertimeController::class, 'printOvertimesReport'])
                 ->name('api.overtimes.print');
         });
+
+        Route::prefix('debts-report')->group(function () {
+            Route::get('/export', [\App\Http\Controllers\Api\Reports\DebtController::class, 'exportDebtReports'])
+                ->name('api.debts.export');
+            Route::get('/print', [\App\Http\Controllers\Api\Reports\DebtController::class, 'printDebtReport'])
+                ->name('api.debts.print');
+        });
     });
 });
