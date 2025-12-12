@@ -327,6 +327,27 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::prefix('transaction')->group(function () {
+
+        Route::prefix('attendances')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Api\Transaction\AttendanceController::class, 'index'])
+                ->middleware('permission:view transactions attendances')
+                ->name('api.attendances.index');
+            Route::post('/', [\App\Http\Controllers\Api\Transaction\AttendanceController::class, 'store'])
+                ->middleware('permission:create transactions attendances')
+                ->name('api.attendances.store');
+
+            Route::prefix('{attendance}')->group(function () {
+                Route::get('/', [\App\Http\Controllers\Api\Transaction\AttendanceController::class, 'show'])
+                    ->middleware('permission:view transactions attendances')
+                    ->name('api.attendances.show');
+                Route::put('/', [\App\Http\Controllers\Api\Transaction\AttendanceController::class, 'update'])
+                    ->middleware('permission:update transactions attendances')
+                    ->name('api.attendances.update');
+                Route::delete('/', [\App\Http\Controllers\Api\Transaction\AttendanceController::class, 'destroy'])
+                    ->middleware('permission:delete transactions attendances')
+                    ->name('api.attendances.destroy');
+            });
+        });
         Route::prefix('leaves')->group(function () {
             Route::get('/', [\App\Http\Controllers\Api\Transaction\LeaveController::class, 'index'])
                 ->middleware('permission:view transactions leaves')

@@ -66,6 +66,12 @@ Route::middleware('auth:sanctum')->group(function () {
                 ->name('api.reimbursements.print');
         });
 
+        Route::prefix('attendances')->group(function () {
+            Route::get('/export', [\App\Http\Controllers\Api\Transaction\AttendanceController::class, 'exportAttendances'])
+                ->name('api.attendances.export');
+            Route::get('/print', [\App\Http\Controllers\Api\Transaction\AttendanceController::class, 'printAttendances'])
+                ->name('api.attendances.print');
+        });
         Route::prefix('branches')->group(function () {
             Route::get('/export', [\App\Http\Controllers\Api\MasterData\BranchController::class, 'exportBranches'])
                 ->name('api.branches.export');

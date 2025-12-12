@@ -140,10 +140,10 @@ class AttendanceController extends Controller
 
             Attendance::create([
                 'user_id' => $user->id,
-                'date' => now()->toDateString(),
+                'date_in' => now()->toDateString(),
                 'time_in' => now(),
-                'location_lat' => $request->latitude,
-                'location_lng' => $request->longitude,
+                'lat_in' => $request->latitude,
+                'lng_in' => $request->longitude,
                 'photo_in' => $image_path
             ]);
             DB::commit();
