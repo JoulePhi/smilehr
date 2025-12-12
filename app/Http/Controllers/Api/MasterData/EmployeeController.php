@@ -16,6 +16,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 
 class EmployeeController extends Controller
@@ -112,6 +113,12 @@ class EmployeeController extends Controller
 
             $path = $uploader->upload($request->file('profile_image'));
 
+
+            $idCardCode = (string) Str::uuid();
+            while (User::where('employee_id_code', $idCardCode)->exists()) {
+                $idCardCode = (string) Str::uuid();
+            }
+
             $employee = User::create([
                 'company_id' => $this->tenantService->getCompanyId(),
                 'branch_office_id' => $request->branch_office_id,
@@ -143,8 +150,9 @@ class EmployeeController extends Controller
                 'allow_remote_attendance' => $request->allow_remote_attendance,
                 'allow_branch_hopping' => $request->allow_branch_hopping,
                 'check_in_mode' => $request->check_in_mode,
-
                 'password' => bcrypt('12345678'),
+                'pin' => bcrypt('000000'),
+                'employee_id_code' => $idCardCode,
             ]);
 
             $employee->assignRole('Employee');

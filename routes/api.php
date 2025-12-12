@@ -6,11 +6,17 @@ use Illuminate\Support\Facades\Route;
 Route::post('/auth/register', [\App\Http\Controllers\Api\AuthController::class, 'register']);
 Route::post('/auth/login', [\App\Http\Controllers\Api\AuthController::class, 'login']);
 
-
+Route::prefix('attendance')->group(function () {
+    Route::post('/verify-id-card', [\App\Http\Controllers\Api\AttendanceController::class, 'verifyIdCard']);
+    Route::post('/verify-pin', [\App\Http\Controllers\Api\AttendanceController::class, 'verifyPin']);
+    Route::post('/verify-face', [\App\Http\Controllers\Api\AttendanceController::class, 'verifyFace']);
+    Route::post('/check-in', [\App\Http\Controllers\Api\AttendanceController::class, 'checkIn']);
+});
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/auth/logout', [\App\Http\Controllers\Api\AuthController::class, 'logout']);
     Route::get('/auth/profile', [\App\Http\Controllers\Api\AuthController::class, 'profile']);
+
 
     Route::prefix('master-data')->group(function () {
         Route::prefix('banners')->group(function () {

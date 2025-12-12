@@ -56,7 +56,9 @@ class User extends Authenticatable
         'allow_branch_hopping',
         'id_card_number',
         'check_in_mode',
-
+        'pin',
+        'face_descriptor',
+        'employee_id_code',
     ];
 
     /**
