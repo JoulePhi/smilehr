@@ -136,4 +136,10 @@ class User extends Authenticatable
             $query->where('name', 'Employee');
         });
     }
+
+    public function hasScheduleToday(): bool
+    {
+        $today = date('Y-m-d');
+        return $this->schedules()->where('date', $today)->exists();
+    }
 }

@@ -17,9 +17,7 @@ class OvertimeResource extends JsonResource
         return [
             'id' => $this->id,
             'user_id' => $this->user_id,
-            'employee_name' => $this->whenLoaded('user', function () {
-                return $this->user->name;
-            }),
+            'employee_name' => $this->user != null &&  $this->whenLoaded('user') ? $this->user->name : null,
             'shift_in_date' => $this->shift_in_date,
             'shift_out_date' => $this->shift_out_date,
             'shift_in' => $this->shift_in,

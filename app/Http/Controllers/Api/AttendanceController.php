@@ -101,6 +101,27 @@ class AttendanceController extends Controller
                     ],
                 ], 422);
             }
+
+            // check if already checked in today
+            $existingAttendance = Attendance::where('user_id', $user->id)
+                ->whereDate('date_in', now()->toDateString())
+                ->first();
+
+            if ($existingAttendance) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'You have already checked in today.'
+                ], 409);
+            }
+
+            // check if user have schedule today
+            if (!$user->hasScheduleToday()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'You do not have a schedule today.'
+                ], 403);
+            }
+
             $branch  = $user->branch;
 
             $distance = $this->geoService->getDistance(

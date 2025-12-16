@@ -75,7 +75,7 @@ class LeaveController extends Controller
                     'user_id' => $row['employee_id'],
                     'date' => $row['date'],
                     'type' => $row['type'],
-                    'remarks' => $row['remarks'] ?? null,
+                    'remarks' => $row['remarks'] ?? '',
                     'is_approved' => $row['is_approved'] ?? 0,
                     'is_validated' => $row['is_validated'] ?? 0,
                     'created_at' => Carbon::now(),

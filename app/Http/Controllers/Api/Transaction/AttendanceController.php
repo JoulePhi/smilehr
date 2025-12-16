@@ -74,7 +74,7 @@ class AttendanceController extends Controller
                     'date_out' => $row['date_out'],
                     'time_in' => $row['time_in'],
                     'time_out' => $row['time_out'],
-                    'remarks' => $row['remarks'] ?? null,
+                    'remarks' => $row['remarks'] ?? '',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];

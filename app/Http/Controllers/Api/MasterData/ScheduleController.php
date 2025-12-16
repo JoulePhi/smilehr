@@ -77,13 +77,17 @@ class ScheduleController extends Controller
     {
         try {
             $dataToInsert = collect($request->all())->map(function ($row) {
+                // if schedule for user_id and shift_in_date already exists, skip to next
+                if (Schedule::where('user_id', $row['employee_id'])->where('shift_in_date', $row['shift_in_date'])->exists()) {
+                    return null;
+                }
                 return [
                     'user_id' => $row['employee_id'],
                     'shift_in_date' => $row['shift_in_date'],
                     'shift_in' => $row['shift_in'],
                     'shift_out_date' => $row['shift_out_date'],
                     'shift_out' => $row['shift_out'],
-                    'remarks' => $row['remarks'] ?? null,
+                    'remarks' => $row['remarks'] ?? '',
                     'is_approved' => $row['is_approved'] ?? 0,
                     'is_validated' => $row['is_validated'] ?? 0,
                     'created_at' => Carbon::now(),
@@ -92,7 +96,10 @@ class ScheduleController extends Controller
             })->toArray();
             DB::beginTransaction();
             foreach (array_chunk($dataToInsert, 500) as $chunk) {
-                Schedule::insert($chunk);
+                // Skip null entries
+                $chunk = array_filter($chunk);
+                if (!empty($chunk))
+                    Schedule::insert($chunk);
             }
             DB::commit();
             Log::info('Schedule created', ['created_by' => $request->user()->id]);

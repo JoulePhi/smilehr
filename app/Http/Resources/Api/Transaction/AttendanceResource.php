@@ -17,7 +17,7 @@ class AttendanceResource extends JsonResource
         return [
             'id' => $this->id,
             'employee_id' => $this->user_id,
-            'employee_name' => $this->whenLoaded('user') ? $this->user->name : null,
+            'employee_name' => $this->user != null && $this->whenLoaded('user') ? $this->user->name : null,
             'date_in' => $this->date_in,
             'date_out' => $this->date_out,
             'time_in' =>  $this->time_in,

@@ -23,26 +23,21 @@ class RolesAndPermissionsSeeder extends Seeder
 
         // Create permissions
         $permissions = [
-
-            // Home
             'view home',
             'create home',
             'update home',
             'delete home',
 
-            // Dashboard
             'view dashboard',
             'create dashboard',
             'update dashboard',
             'delete dashboard',
 
-            // Master Data (module)
             'view master data',
             'create master data',
             'update master data',
             'delete master data',
 
-            // Master Data → Children
             'view master data roles',
             'create master data roles',
             'update master data roles',
@@ -104,13 +99,11 @@ class RolesAndPermissionsSeeder extends Seeder
             'update master data applications',
             'delete master data applications',
 
-            // Transactions (module)
             'view transactions',
             'create transactions',
             'update transactions',
             'delete transactions',
 
-            // Transactions → Children
             'view transactions attendances',
             'create transactions attendances',
             'update transactions attendances',
@@ -136,13 +129,11 @@ class RolesAndPermissionsSeeder extends Seeder
             'update transactions kpi',
             'delete transactions kpi',
 
-            // Reports (module)
             'view reports',
             'create reports',
             'update reports',
             'delete reports',
 
-            // Reports → Children
             'view reports branches',
             'create reports branches',
             'update reports branches',
@@ -204,13 +195,11 @@ class RolesAndPermissionsSeeder extends Seeder
             'update reports kpi',
             'delete reports kpi',
 
-            // Tools (module)
             'view tools',
             'create tools',
             'update tools',
             'delete tools',
 
-            // Tools → Children
             'view tools id card',
             'create tools id card',
             'update tools id card',
@@ -232,25 +221,21 @@ class RolesAndPermissionsSeeder extends Seeder
             'update tools access log',
             'delete tools access log',
 
-            // Settings
             'view settings',
             'create settings',
             'update settings',
             'delete settings',
 
-            // Attendances (standalone)
             'view attendances',
             'create attendances',
             'update attendances',
             'delete attendances',
 
-            // E-slip
             'view e-slip',
             'create e-slip',
             'update e-slip',
             'delete e-slip',
 
-            // Update Pin
             'view update pin',
             'create update pin',
             'update update pin',
@@ -270,8 +255,8 @@ class RolesAndPermissionsSeeder extends Seeder
         $superAdminRole = Role::firstOrCreate(['name' => 'Super Admin']);
         $superAdminRole->givePermissionTo(Permission::all());
 
-        $adminRole = Role::firstOrCreate(['name' => 'HR']);
-        $adminRole->givePermissionTo([
+        $hrRole = Role::firstOrCreate(['name' => 'HR']);
+        $hrRole->givePermissionTo([
             'view home',
             'view dashboard',
         ]);
@@ -283,7 +268,7 @@ class RolesAndPermissionsSeeder extends Seeder
         ]);
 
         $superAdmin = User::firstOrCreate([
-            'email' => 'superadmin@hrdsiltrans.com',
+            'email' => 'superadmin@smilehr.com',
         ], [
             'name' => 'Super Admin',
             'password' => bcrypt('superadmin123'),
@@ -291,14 +276,16 @@ class RolesAndPermissionsSeeder extends Seeder
 
         $superAdmin->assignRole('Super Admin');
 
-        $admin = User::firstOrCreate([
+
+
+        $hr = User::firstOrCreate([
             'email' => 'hr@hrdsiltrans.com',
         ], [
             'name' => 'HR User',
             'password' => bcrypt('hr123456'),
         ]);
 
-        $admin->assignRole('HR');
+        $hr->assignRole('HR');
 
         $employeeRole = Role::firstOrCreate(['name' => 'Employee']);
         $employeeRole->givePermissionTo([

@@ -110,5 +110,12 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/print', [\App\Http\Controllers\Api\Reports\ReimbursementController::class, 'printReimburseReport'])
                 ->name('api.reimbursements.print');
         });
+
+        Route::prefix('attendances-report')->group(function () {
+            Route::get('/export', [\App\Http\Controllers\Api\Reports\AttendanceController::class, 'exportAttendanceReports'])
+                ->name('api.attendances.export');
+            Route::get('/print', [\App\Http\Controllers\Api\Reports\AttendanceController::class, 'printAttendanceReport'])
+                ->name('api.attendances.print');
+        });
     });
 });

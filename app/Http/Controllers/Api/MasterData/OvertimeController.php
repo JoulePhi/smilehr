@@ -78,7 +78,7 @@ class OvertimeController extends Controller
                     'shift_in' => $row['shift_in'],
                     'shift_out_date' => $row['shift_out_date'],
                     'shift_out' => $row['shift_out'],
-                    'remarks' => $row['remarks'] ?? null,
+                    'remarks' => $row['remarks'] ?? '',
                     'is_special' => $row['is_special'] ?? 0,
                     'is_approved' => $row['is_approved'] ?? 0,
                     'is_validated' => $row['is_validated'] ?? 0,

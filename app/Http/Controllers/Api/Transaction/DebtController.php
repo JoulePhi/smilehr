@@ -75,7 +75,7 @@ class DebtController extends Controller
                     'user_id' => $row['employee_id'],
                     'date' => $row['date'],
                     'amount' => $row['amount'],
-                    'remarks' => $row['remarks'] ?? null,
+                    'remarks' => $row['remarks'] ?? '',
                     'is_approved' => $row['is_approved'] ?? 0,
                     'is_paid' => $row['is_paid'] ?? 0,
                     'created_at' => Carbon::now(),

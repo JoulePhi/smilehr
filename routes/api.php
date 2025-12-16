@@ -418,6 +418,15 @@ Route::middleware('auth:sanctum')->group(function () {
                 ->middleware('permission:view reports leaves')
                 ->name('api.leaves.index');
         });
+
+        Route::prefix('attendances')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Api\Reports\AttendanceController::class, 'index'])
+                ->middleware('permission:view reports attendances')
+                ->name('api.attendances.index');
+            Route::get('/{employee_id}/{period}', [\App\Http\Controllers\Api\Reports\AttendanceController::class, 'detail'])
+                ->middleware('permission:view reports attendances')
+                ->name('api.attendances.detail');
+        });
         Route::prefix('overtimes')->group(function () {
             Route::get('/', [\App\Http\Controllers\Api\Reports\OvertimeController::class, 'index'])
                 ->middleware('permission:view reports overtimes')
